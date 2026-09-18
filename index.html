@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>root@terminal — access</title>
+  <style>
+    :root {
+      --bg: #05080a;
+      --green: #33ff66;
+      --green-dim: #1f9c3f;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--green);
+      font-family: "Cascadia Code", "Consolas", "Courier New", monospace;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      overflow: hidden;
+    }
+    .term {
+      width: 100%;
+      max-width: 720px;
+      background: rgba(0,0,0,0.55);
+      border: 1px solid var(--green-dim);
+      border-radius: 8px;
+      box-shadow: 0 0 40px rgba(51,255,102,0.15);
+      overflow: hidden;
+    }
+    .bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #0b1016;
+      border-bottom: 1px solid var(--green-dim);
+    }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .r { background:#ff5f56; } .y { background:#ffbd2e; } .g { background:#27c93f; }
+    .bar span { margin-left: 8px; color: var(--green-dim); font-size: 13px; }
+    .screen {
+      padding: 20px;
+      min-height: 260px;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    .line { white-space: pre-wrap; }
+    .prompt { color: var(--green-dim); }
+    .cursor {
+      display: inline-block;
+      width: 9px;
+      height: 17px;
+      background: var(--green);
+      vertical-align: middle;
+      animation: blink 1s steps(2, start) infinite;
+    }
+    @keyframes blink { to { visibility: hidden; } }
+    .dl {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 12px 22px;
+      background: transparent;
+      color: var(--green);
+      border: 1px solid var(--green);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 15px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .dl:hover { background: var(--green); color: #000; box-shadow: 0 0 20px rgba(51,255,102,0.5); }
+    .hint { margin-top: 14px; color: var(--green-dim); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="term">
+    <div class="bar">
+      <div class="dot r"></div>
+      <div class="dot y"></div>
+      <div class="dot g"></div>
+      <span>cmd.exe</span>
+    </div>
+    <div class="screen">
+      <div class="line" id="out"></div>
+      <div id="controls" style="display:none;">
+        <a class="dl" href="rickroll.bat" download>[ download payload.bat ]</a>
+        <div class="hint">Then double-click the downloaded file to run it.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const lines = [
+      "> initializing connection...",
+      "> establishing secure channel [OK]",
+      "> locating payload...",
+      "> payload ready.",
+      "",
+      "> awaiting user confirmation_"
+    ];
+    const out = document.getElementById("out");
+    const controls = document.getElementById("controls");
+    let i = 0;
+
+    function typeLine() {
+      if (i >= lines.length) {
+        out.innerHTML += '<span class="cursor"></span>';
+        controls.style.display = "block";
+        return;
+      }
+      const p = lines[i].startsWith(">") ? '<span class="prompt">&gt;</span>' + lines[i].slice(1) : lines[i];
+      out.innerHTML += p + "\n";
+      i++;
+      setTimeout(typeLine, 450);
+    }
+    typeLine();
+  </script>
+</body>
+</html>
